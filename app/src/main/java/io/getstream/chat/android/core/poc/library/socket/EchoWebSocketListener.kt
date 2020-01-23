@@ -1,5 +1,6 @@
 package io.getstream.chat.android.core.poc.library.socket
 
+import android.util.Log
 import com.google.gson.JsonSyntaxException
 import io.getstream.chat.android.core.poc.library.Event
 import io.getstream.chat.android.core.poc.library.json.ChatGson
@@ -23,7 +24,7 @@ class EchoWebSocketListener(val service: StreamWebSocketService) : WebSocketList
         if (service.wsId > 1) {
             service.eventHandler.post { service.connectionRecovered() }
         }
-        //Log.d(TAG, "WebSocket #" + wsId.toString() + " Connected : " + response)
+        Log.d(this.javaClass.canonicalName, "WebSocket #" + service.wsId.toString() + " Connected : " + response)
     }
 
     @Synchronized

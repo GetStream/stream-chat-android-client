@@ -43,10 +43,14 @@ class TestUsersApiMethodsActivity : AppCompatActivity() {
     }
 
     private fun setGuestUser() {
-        client.setGuestUser(User("guest"))
+        client.setGuestUser(User("guest")) {result ->
+            echoResult(result, "Connected", "Socket connection error")
+        }
     }
 
     private fun setAnonymousUser() {
-        client.setAnonymousUser()
+        client.setAnonymousUser {result ->
+            echoResult(result, "Connected", "Socket connection error")
+        }
     }
 }

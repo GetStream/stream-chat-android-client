@@ -156,4 +156,18 @@ class ChatApiImpl constructor(
         )
     }
 
+    //region users
+
+    fun setGuestUser(apiKey: String, userId: String, userName: String?) = callMapper.map(
+        retrofitApi.setGuestUser(
+            apiKey = apiKey,
+            body = GuestUserRequest(
+                id = userId,
+                name = userName
+            )
+        )
+    )
+
+    // endregion
+
 }

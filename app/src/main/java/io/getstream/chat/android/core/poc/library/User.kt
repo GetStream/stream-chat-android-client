@@ -10,13 +10,16 @@ import kotlin.collections.HashMap
 class User : UserEntity {
 
     var id: String = ""
-    var name: String = ""
+    var name: String? = ""
     var image: String = ""
     var role: String = ""
+
     @IgnoreSerialisation
     var created_at: Date = UndefinedDate
+
     @IgnoreSerialisation
     var updated_at: Date = UndefinedDate
+
     @IgnoreSerialisation
     var last_active: Date = UndefinedDate
     var online: Boolean = false
@@ -84,25 +87,27 @@ class User : UserEntity {
     val initials: String?
         get() {
             val name = name
-            val names = name.split(" ").toTypedArray()
-            val firstName = names[0]
+            val names = name?.split(" ")?.toTypedArray()
+            val firstName = names?.get(0)
             var lastName: String? = null
             try {
-                lastName = names[1]
+                lastName = names?.get(1)
             } catch (e: Exception) {
             }
-            if (!TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName)) return firstName.substring(
+            if (!TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName)) return firstName?.substring(
                 0,
                 1
-            ).toUpperCase()
-            if (TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) return lastName!!.substring(
+            )?.toUpperCase()
+
+            if (TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) return lastName?.substring(
                 0,
                 1
-            ).toUpperCase()
-            return if (!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) firstName.substring(
+            )?.toUpperCase()
+
+            return if (!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName)) firstName?.substring(
                 0,
                 1
-            ).toUpperCase() + lastName!!.substring(0, 1).toUpperCase() else null
+            )?.toUpperCase() + lastName!!.substring(0, 1).toUpperCase() else null
         }
 
     // TODO: populate this from API

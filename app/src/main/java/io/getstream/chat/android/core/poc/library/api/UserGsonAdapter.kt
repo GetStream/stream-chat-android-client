@@ -1,6 +1,5 @@
 package io.getstream.chat.android.core.poc.library.api
 
-import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import io.getstream.chat.android.core.poc.library.Device
 import io.getstream.chat.android.core.poc.library.Mute
@@ -19,7 +18,7 @@ class UserGsonAdapter : TypeAdapter<User>() {
         user.extraData.map { data[it.key] = it.value }
 
         data["id"] = user.id
-        data["name"] = user.name
+        data["name"] = user.name ?: ""
         data["image"] = user.image
         val adapter = ChatGson.instance.getAdapter(HashMap::class.java)
         adapter.write(writer, data)

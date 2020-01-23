@@ -12,7 +12,6 @@ import io.getstream.chat.android.core.poc.library.socket.ChatSocketConnectionImp
 import io.getstream.chat.android.core.poc.library.socket.ConnectionData
 import java.util.UUID.randomUUID
 
-
 class StreamChatClient(
     val apiKey: String,
     private val apiOptions: ApiClientOptions
@@ -27,6 +26,8 @@ class StreamChatClient(
     private var fetchingToken = false
     private var isAnonymous = false
 
+    private val TAG = StreamChatClient::class.java.canonicalName
+
     private val socket = ChatSocketConnectionImpl(apiKey, apiOptions.wssURL)
 
     fun setUser(
@@ -38,7 +39,7 @@ class StreamChatClient(
 
         if (state.user != null) {
             Log.e(
-                this.javaClass.canonicalName,
+                TAG,
                 "setUser was called but a user is already set; this is probably an integration mistake"
             )
             return
@@ -72,12 +73,9 @@ class StreamChatClient(
     /**
      * Setup an anonymous session
      */
-    fun setAnonymousUser() {
+    fun setAnonymousUser(callback: (Result<ConnectionData>) -> Unit) {
         if (state.user != null) {
-            Log.w(
-                this.javaClass.canonicalName,
-                "setAnonymousUser was called but a user is already set"
-            )
+            Log.w(TAG, "setAnonymousUser was called but a user is already set")
             return
         }
 
@@ -87,7 +85,7 @@ class StreamChatClient(
         val uuid = randomUUID().toString()
 
         state.user = User(uuid)
-        connect(anonymousConnection)
+        connect(anonymousConnection, callback)
     }
 
     /**
@@ -95,49 +93,65 @@ class StreamChatClient(
      *
      * @param user Data about this user. IE {name: "john"}
      */
-    fun setGuestUser(user: User) {
-        if (state.user != null) {
-            Log.w(
-                this.javaClass.canonicalName,
-                "setGuestUser was called but a user is already set;"
-            )
+    fun setGuestUser(user: User, callback: (Result<ConnectionData>) -> Unit) {
+        //TODO Implement guest user
+        /*if (state.user != null) {
+            Log.w(TAG, "setGuestUser was called but a user is already set;")
             return
         }
 
+        anonymousConnection = false
+        initTokenProvider(provider)
 
-        /*val body = GuestUserRequest(user.getId(), user.getName())
-        apiService = apiServiceProvider.provideApiService(null, true)
-        apiService.setGuestUser(apiKey, body).enqueue(object : Callback<TokenResponse?> {
-            override fun onResponse(
-                call: Call<TokenResponse?>,
-                response: Response<TokenResponse?>
-            ) {
-                if (response.body() != null) {
-                    setUser(user, response.body().getToken())
-                }
-            }
+        api = ChatApiImpl.provideChatApi(apiKey, apiOptions, tokenProvider, anonymousConnection)
 
-            override fun onFailure(
-                call: Call<TokenResponse?>,
-                t: Throwable
-            ) {
-                StreamChat.getLogger().logE(this, "Problem with setting guest user: " + t.message)
-            }
-        })*/
+        api.setGuestUser(apiKey = apiKey, userId = user.id, userName = user.name)
+        setUser(user, provider, callback)
+
+        connect(anonymousConnection, callback)*/
     }
 
     fun events(): ChatObservable {
         return socket.events()
     }
 
-    private fun connect(anonymousConnection: Boolean = false) {
+    private fun connect(
+        anonymousConnection: Boolean = false,
+        callback: (Result<ConnectionData>) -> Unit
+    ) {
         Log.i(this.javaClass.canonicalName, "client.connect was called")
 
-        //TODO Implement connection logic
         if (anonymousConnection) {
+            socket.connect().enqueue { connection ->
+                if (connection.isSuccess) {
+                    safeLet(
+                        connection.data()?.connectionId,
+                        connection.data()?.user?.id
+                    ) { connectionId, userId ->
+                        api.connectionId = connectionId
+                        api.userId = userId
+                    }
+                }
 
+                callback.invoke(connection)
+            }
         } else {
+            safeLet(state.user, tokenProvider) { user, provider ->
+                socket.connect(user, provider).enqueue { connection ->
 
+                    if (connection.isSuccess) {
+                        safeLet(
+                            connection.data()?.connectionId,
+                            connection.data()?.user?.id
+                        ) { connectionId, userId ->
+                            api.connectionId = connectionId
+                            api.userId = userId
+                        }
+                    }
+
+                    callback.invoke(connection)
+                }
+            }
         }
     }
 
@@ -182,7 +196,11 @@ class StreamChatClient(
         return api.showChannel(channelType, channelId)
     }
 
-    fun hideChannel(channelType: String, channelId: String, clearHistory:Boolean = false): ChatCall<Unit> {
+    fun hideChannel(
+        channelType: String,
+        channelId: String,
+        clearHistory: Boolean = false
+    ): ChatCall<Unit> {
         return api.hideChannel(channelType, channelId, clearHistory)
     }
 
@@ -214,7 +232,7 @@ class StreamChatClient(
         return api.rejectInvite(channelType, channelId)
     }
 
-    fun acceptInvite(channelType: String, channelId: String, message:String): ChatCall<Channel> {
+    fun acceptInvite(channelType: String, channelId: String, message: String): ChatCall<Channel> {
         return api.acceptInvite(channelType, channelId, message)
     }
 
@@ -234,7 +252,7 @@ class StreamChatClient(
 //        }
         //connectionRecovered()
 
-        connect(anonymousConnection)
+        //connect(anonymousConnection)
     }
 
     private fun initTokenProvider(provider: TokenProvider) {
@@ -252,7 +270,7 @@ class StreamChatClient(
                     return
                 } else {
                     // token is not in cache and there are no in-flight requests, go fetch it
-                    Log.d(this.javaClass.canonicalName, "Go get a new token")
+                    Log.d(TAG, "Go get a new token")
                     fetchingToken = true
                 }
 

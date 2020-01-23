@@ -249,7 +249,8 @@ class StreamWebSocketService : WebSocketListener(), WebSocketService {
 
     private fun setupWS() {
         wsId++
-        val request: Request = Request.Builder().url(getWsUrl()).build()
+        val wsUrl = getWsUrl()
+        val request: Request = Request.Builder().url(wsUrl).build()
         httpClient = OkHttpClient()
         webSocket = httpClient.newWebSocket(request, listener)
         httpClient.dispatcher.executorService.shutdown()
@@ -269,8 +270,8 @@ class StreamWebSocketService : WebSocketListener(), WebSocketService {
         var json = buildUserDetailJson(user)
         return try {
             json = URLEncoder.encode(json, StandardCharsets.UTF_8.name())
-            val baseWsUrl: String =
-                wsEndpoint + "connect?json=" + json + "&api_key=" + apiKey
+            val baseWsUrl: String = wsEndpoint + "connect?json=" + json + "&api_key=" + apiKey
+
             if (user == null) {
                 "$baseWsUrl&stream-auth-type=anonymous"
             } else {

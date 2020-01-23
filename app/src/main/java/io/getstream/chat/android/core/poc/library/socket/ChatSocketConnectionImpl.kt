@@ -6,8 +6,8 @@ import io.getstream.chat.android.core.poc.library.User
 import io.getstream.chat.android.core.poc.library.call.ChatCall
 
 class ChatSocketConnectionImpl(
-    val apiKey: String,
-    val wssUrl: String
+    private val apiKey: String,
+    private val wssUrl: String
 ) {
 
     private val service = StreamWebSocketService()
