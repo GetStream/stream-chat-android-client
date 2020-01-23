@@ -8,6 +8,7 @@ import io.getstream.chat.android.core.poc.R
 import io.getstream.chat.android.core.poc.app.App
 import io.getstream.chat.android.core.poc.library.*
 import io.getstream.chat.android.core.poc.library.requests.QuerySort
+import io.getstream.chat.android.core.poc.library.rest.ChannelWatchRequest
 import kotlinx.android.synthetic.main.activity_test_api.*
 
 class TestChannelsApiMethodsActivity : AppCompatActivity() {
@@ -47,15 +48,45 @@ class TestChannelsApiMethodsActivity : AppCompatActivity() {
         btnRejectInvite.setOnClickListener { rejectInvite() }
         btnHideChannel.setOnClickListener { hideChannel() }
         btnShowChannel.setOnClickListener { showChannel() }
+        btnMarkReadMessage.setOnClickListener { markReadMessage() }
+        btnWatchChannel.setOnClickListener { watchChannel() }
     }
 
-    private fun showChannel(){
+    private fun watchChannel() {
+
+        Thread {
+
+            val withLimit = QueryChannelsRequest(
+                FilterObject(),
+                QuerySort()
+            ).withLimit(1)
+
+            val channelsResult = client.queryChannels(withLimit).execute()
+
+            echoResult(channelsResult)
+
+            if (channelsResult.isSuccess) {
+                val watchResult = channelsResult.data()[0].watch(ChannelWatchRequest()).execute()
+
+                echoResult(watchResult)
+            }
+        }.start()
+
+    }
+
+    private fun markReadMessage() {
+        client.markRead(channelType, channelId, "zed").enqueue {
+            echoResult(it)
+        }
+    }
+
+    private fun showChannel() {
         client.showChannel(channelType, channelId).enqueue {
             echoResult(it)
         }
     }
 
-    private fun hideChannel(){
+    private fun hideChannel() {
         client.hideChannel(channelType, channelId).enqueue {
             echoResult(it)
         }
