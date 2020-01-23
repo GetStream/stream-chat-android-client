@@ -82,19 +82,17 @@ class ChannelState {
 
             for (m in members) {
                 if (!channel.client.fromCurrentUser(m)) {
-                    val user: User =
-                        channel.client.getState().getUser(m.user.id)
-
-                    users.add(user)
+                    channel.client.getState().getUser(m.user.id)?.let {
+                        users.add(it)
+                    }
                 }
             }
 
             for (w in watchers) {
                 if (!channel.client.fromCurrentUser(w)) {
-                    val user: User =
-                        channel.client.getState().getUser(w.user.id)
-
-                    if (!users.contains(user)) users.add(user)
+                    channel.client.getState().getUser(w.user.id)?.let {
+                        if (!users.contains(it)) users.add(it)
+                    }
                 }
             }
 

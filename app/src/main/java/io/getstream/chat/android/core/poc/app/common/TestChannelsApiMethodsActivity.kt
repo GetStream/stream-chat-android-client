@@ -1,9 +1,9 @@
 package io.getstream.chat.android.core.poc.app.common
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import io.getstream.chat.android.core.poc.common.extensions.echoResult
 import io.getstream.chat.android.core.poc.R
 import io.getstream.chat.android.core.poc.app.App
 import io.getstream.chat.android.core.poc.library.*
@@ -67,18 +67,6 @@ class TestChannelsApiMethodsActivity : AppCompatActivity() {
     private fun stopWatching() {
         client.stopWatching(channelType, channelId).enqueue {
             echoResult(it)
-        }
-    }
-
-    private fun echoResult(
-        result: Result<*>,
-        success: String = "Success",
-        error: String = "Error"
-    ) {
-        if (result.isSuccess) {
-            Toast.makeText(this, success, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, error + ": " + result.error().message, Toast.LENGTH_SHORT).show()
         }
     }
 }

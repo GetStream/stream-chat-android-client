@@ -39,7 +39,7 @@ class SocketTestActivity : AppCompatActivity() {
                 }
             }) {
                 if (it.isSuccess) {
-                    textSocketState.text = "Connected with " + it.data().user.id
+                    textSocketState.text = "Connected with " + it.data()?.user?.id
                 } else {
                     textSocketState.text = "Connection error " + it.error()
                 }

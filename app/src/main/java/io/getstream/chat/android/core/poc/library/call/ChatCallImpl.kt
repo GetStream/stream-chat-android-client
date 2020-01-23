@@ -29,7 +29,7 @@ abstract class ChatCallImpl<T> : ChatCall<T> {
                     val resultA = callA.execute()
 
                     return if (resultA.isSuccess) {
-                        Result(mapper(resultA.data()), null)
+                        Result(resultA.data()?.let { mapper(it) }, null)
                     } else {
                         Result(null, resultA.error())
                     }
@@ -40,7 +40,7 @@ abstract class ChatCallImpl<T> : ChatCall<T> {
 
                         if (!canceled) {
                             if (it.isSuccess) {
-                                callback(Result(mapper(it.data()), null))
+                                callback(Result(it.data()?.let { data -> mapper(data) }, null))
                             } else {
                                 callback(Result(null, it.error()))
                             }

@@ -1,16 +1,38 @@
 package io.getstream.chat.android.core.poc.library
 
+import io.getstream.chat.android.core.poc.library.api.ApiClientOptions
 import io.getstream.chat.android.core.poc.library.api.QueryChannelsResponse
+import io.getstream.chat.android.core.poc.library.api.RetrofitClient
 import io.getstream.chat.android.core.poc.library.call.ChatCall
 import io.getstream.chat.android.core.poc.library.rest.ChannelQueryRequest
 import io.getstream.chat.android.core.poc.library.rest.ChannelResponse
 import io.getstream.chat.android.core.poc.library.rest.EventResponse
 import io.getstream.chat.android.core.poc.library.rest.UpdateChannelRequest
 
-class ChatApiImpl(
+class ChatApiImpl constructor(
     private val apiKey: String,
     private val retrofitApi: RetrofitApi
 ) {
+
+    companion object {
+        fun provideChatApi(
+            apiKey: String,
+            apiClientOptions: ApiClientOptions,
+            tokenProvider: CachedTokenProvider?,
+            isAnonymous: Boolean
+        ): ChatApiImpl {
+
+            val client = RetrofitClient.getClient(
+                apiClientOptions,
+                tokenProvider,
+                isAnonymous
+            ).create(
+                RetrofitApi::class.java
+            )
+
+            return ChatApiImpl(apiKey, client)
+        }
+    }
 
     var userId: String = ""
     var connectionId: String = ""

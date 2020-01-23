@@ -1,9 +1,13 @@
 package io.getstream.chat.android.core.poc.library.rest
 
+import com.google.gson.annotations.SerializedName
 import io.getstream.chat.android.core.poc.library.User
 
 
-class TokenResponse {
-    lateinit var user: User
-    val access_token: String = ""
-}
+data class TokenResponse(
+    @SerializedName("user")
+    var user: User,
+
+    @SerializedName("access_token")
+    val accessToken: String? = null
+)

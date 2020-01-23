@@ -51,7 +51,7 @@ class StreamPublicStorage(
                 part,
                 client.apiKey,
                 client.getUserId(),
-                client.getClientID()
+                client.clientID
             ).enqueue(callbackWrapper)
         } else {
             mCDNService.sendFile(
@@ -60,7 +60,7 @@ class StreamPublicStorage(
                 part,
                 client.apiKey,
                 client.getUserId(),
-                client.getClientID()
+                client.clientID
             ).enqueue(callbackWrapper)
         }
     }

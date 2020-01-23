@@ -8,7 +8,7 @@ class ClientState {
         user = null
     }
 
-    fun getUser(id: String): User {
+    fun getUser(id: String? = null): User? {
         return null!!
     }
 }

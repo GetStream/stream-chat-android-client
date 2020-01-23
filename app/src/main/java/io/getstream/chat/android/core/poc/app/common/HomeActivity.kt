@@ -2,7 +2,6 @@ package io.getstream.chat.android.core.poc.app.common
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import io.getstream.chat.android.core.poc.R
 import kotlinx.android.synthetic.main.activity_home.*
@@ -25,7 +24,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         btnTestUsersApis.setOnClickListener {
-            Toast.makeText(this, "Undefined", Toast.LENGTH_SHORT).show()
+            startActivity(TestUsersApiMethodsActivity.getIntent(this))
         }
     }
 }

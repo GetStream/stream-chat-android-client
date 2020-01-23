@@ -1,11 +1,8 @@
 package io.getstream.chat.android.core.poc.library.api
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.getstream.chat.android.core.poc.library.CachedTokenProvider
-import io.getstream.chat.android.core.poc.library.QueryChannelsRequest
 import io.getstream.chat.android.core.poc.library.json.ChatGson
-import io.getstream.chat.android.core.poc.library.json.TypeAdapterFactory
 import io.getstream.chat.android.core.poc.library.json.ZConverter
 import io.getstream.chat.android.core.poc.library.socket.ErrorResponse
 import okhttp3.Interceptor
@@ -26,11 +23,12 @@ object RetrofitClient {
 
     fun getClient(
         options: ApiClientOptions,
-        tokenProvider: CachedTokenProvider,
-        anonymousAuth: () -> Boolean
-    ): Retrofit? {
+        tokenProvider: CachedTokenProvider?,
+        anonymousAuth: Boolean
+    ): Retrofit {
 
-        var authInterceptor = TokenAuthInterceptor(tokenProvider, anonymousAuth)
+        val authInterceptor =
+            TokenAuthInterceptor(tokenProvider = tokenProvider, anonymousAuth = anonymousAuth)
 
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -50,12 +48,11 @@ object RetrofitClient {
             }
             .addInterceptor { chain: Interceptor.Chain ->
                 chain.proceed(
-                    prepareRequest(chain, anonymousAuth())
+                    prepareRequest(chain, anonymousAuth)
                 )
             }
+            .addInterceptor(authInterceptor)
             .followRedirects(false)
-
-        clientBuilder.addInterceptor(authInterceptor)
 
         return Retrofit.Builder()
             .baseUrl(options.httpURL)
@@ -71,7 +68,8 @@ object RetrofitClient {
         tokenProvider: CachedTokenProvider,
         options: ApiClientOptions
     ): Retrofit {
-        val authInterceptor = TokenAuthInterceptor(tokenProvider) { false }
+        val authInterceptor =
+            TokenAuthInterceptor(tokenProvider = tokenProvider, anonymousAuth = false)
         val client = OkHttpClient.Builder()
             .connectTimeout(options.cdntimeout.toLong(), TimeUnit.MILLISECONDS)
             .writeTimeout(options.cdntimeout.toLong(), TimeUnit.MILLISECONDS)
@@ -124,7 +122,5 @@ object RetrofitClient {
         gsonBuilder.registerTypeAdapter(type, typeAdapter)
         return GsonConverterFactory.create(gsonBuilder.create())
     }
-
-
 
 }
