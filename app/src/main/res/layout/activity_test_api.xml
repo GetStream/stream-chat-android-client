@@ -28,6 +28,30 @@
             android:layout_height="wrap_content"
             android:text="Stop watching" />
 
+        <Button
+            android:id="@+id/btnAcceptInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept invite" />
+
+        <Button
+            android:id="@+id/btnRejectInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reject invite" />
+
+        <Button
+            android:id="@+id/btnHideChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hide channel" />
+
+        <Button
+            android:id="@+id/btnShowChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show channel" />
+
     </LinearLayout>
 
 

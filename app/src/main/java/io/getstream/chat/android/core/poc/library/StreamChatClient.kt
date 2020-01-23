@@ -178,6 +178,14 @@ class StreamChatClient(
         //activeChannelMap.clear()
     }
 
+    fun showChannel(channelType: String, channelId: String): ChatCall<Unit> {
+        return api.showChannel(channelType, channelId)
+    }
+
+    fun hideChannel(channelType: String, channelId: String, clearHistory:Boolean = false): ChatCall<Unit> {
+        return api.hideChannel(channelType, channelId, clearHistory)
+    }
+
     fun stopWatching(channelType: String, channelId: String): ChatCall<Unit> {
         return api.stopWatching(channelType, channelId)
     }
@@ -200,6 +208,14 @@ class StreamChatClient(
         return api.updateChannel(channelType, channelId, request).map { response ->
             response.channel
         }
+    }
+
+    fun rejectInvite(channelType: String, channelId: String): ChatCall<Channel> {
+        return api.rejectInvite(channelType, channelId)
+    }
+
+    fun acceptInvite(channelType: String, channelId: String, message:String): ChatCall<Channel> {
+        return api.acceptInvite(channelType, channelId, message)
     }
 
     fun markAllRead(): ChatCall<Event> {

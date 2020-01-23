@@ -83,13 +83,23 @@ interface RetrofitApi {
         @Body body: RejectInviteRequest
     ): Call<ChannelResponse>
 
+    @POST("/channels/{type}/{id}/hide")
+    fun hideChannel(
+        @Path("type") channelType: String,
+        @Path("id") channelId: String,
+        @Query("api_key") apiKey: String,
+        @Query("client_id") clientID: String,
+        @Body body: HideChannelRequest
+    ): Call<CompletableResponse>
+
     @POST("/channels/{type}/{id}/show")
+    @JvmSuppressWildcards // See issue: https://github.com/square/retrofit/issues/3275
     fun showChannel(
         @Path("type") channelType: String,
         @Path("id") channelId: String,
         @Query("api_key") apiKey: String,
         @Query("client_id") clientID: String,
-        @Body body: Map<*, *>
+        @Body body: Map<Any, Any>
     ): Call<CompletableResponse>
 
     @Multipart
@@ -102,15 +112,6 @@ interface RetrofitApi {
         @Query("user_id") userId: String,
         @Query("client_id") connectionId: String
     ): Call<UploadFileResponse>
-
-    @POST("/channels/{type}/{id}/hide")
-    fun hideChannel(
-        @Path("type") channelType: String,
-        @Path("id") channelId: String,
-        @Query("api_key") apiKey: String,
-        @Query("client_id") clientID: String,
-        @Body body: HideChannelRequest
-    ): Call<CompletableResponse>
 
     @Multipart
     @POST("/channels/{type}/{id}/file")

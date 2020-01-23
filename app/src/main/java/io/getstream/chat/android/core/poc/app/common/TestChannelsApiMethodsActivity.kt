@@ -43,6 +43,34 @@ class TestChannelsApiMethodsActivity : AppCompatActivity() {
         btnQueryChannels.setOnClickListener { queryChannels() }
         btnUpdateChannel.setOnClickListener { updateChannel() }
         btnStopWatching.setOnClickListener { stopWatching() }
+        btnAcceptInvite.setOnClickListener { acceptInvite() }
+        btnRejectInvite.setOnClickListener { rejectInvite() }
+        btnHideChannel.setOnClickListener { hideChannel() }
+        btnShowChannel.setOnClickListener { showChannel() }
+    }
+
+    private fun showChannel(){
+        client.showChannel(channelType, channelId).enqueue {
+            echoResult(it)
+        }
+    }
+
+    private fun hideChannel(){
+        client.hideChannel(channelType, channelId).enqueue {
+            echoResult(it)
+        }
+    }
+
+    private fun rejectInvite() {
+        client.rejectInvite(channelType, channelId).enqueue {
+            echoResult(it)
+        }
+    }
+
+    private fun acceptInvite() {
+        client.acceptInvite(channelType, channelId, "hello-accept").enqueue {
+            echoResult(it)
+        }
     }
 
     private fun updateChannel() {
