@@ -2,13 +2,17 @@ package io.getstream.chat.android.client.socket
 
 import android.os.Handler
 import io.getstream.chat.android.client.events.ChatEvent
+import io.getstream.chat.android.client.logger.ChatLogger
 import io.getstream.chat.android.client.models.EventType
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
-class HealthMonitor(val socket: ChatSocketServiceImpl) {
+class HealthMonitor(
+    val socket: ChatSocketServiceImpl,
+    val logger: ChatLogger?
+) {
 
     private val delayHandler = Handler()
     private val healthCheckInterval = 30 * 1000L
@@ -58,9 +62,11 @@ class HealthMonitor(val socket: ChatSocketServiceImpl) {
     }
 
     private fun reconnect() {
+        val retryInterval = getRetryInterval()
+        logger?.logD(this, "Socket reconnect in $retryInterval")
         delayHandler.postDelayed(
             reconnect,
-            getRetryInterval()
+            retryInterval
         )
     }
 

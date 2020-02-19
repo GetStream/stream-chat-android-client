@@ -27,7 +27,7 @@ open class ChatModules(val config: ChatClientConfig) {
             api()
         )
     }
-    private val defaultApi by lazy { buildApi(config, parser(), logger()) }
+    private val defaultApi by lazy { buildApi(config, parser()) }
     private val defaultSocket by lazy { buildSocket(config, parser(), logger()) }
 
     //region Modules
@@ -107,8 +107,7 @@ open class ChatModules(val config: ChatClientConfig) {
 
     private fun buildApi(
         chatConfig: ChatClientConfig,
-        parser: ChatParser,
-        logger: ChatLogger
+        parser: ChatParser
     ): ChatApi {
         return ChatApiImpl(
             buildRetrofitApi(),

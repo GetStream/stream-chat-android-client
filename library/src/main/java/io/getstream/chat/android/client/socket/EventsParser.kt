@@ -1,18 +1,18 @@
 package io.getstream.chat.android.client.socket
 
-import android.util.Log
-import io.getstream.chat.android.client.models.EventType
 import io.getstream.chat.android.client.errors.ChatNetworkError
 import io.getstream.chat.android.client.events.*
+import io.getstream.chat.android.client.logger.ChatLogger
+import io.getstream.chat.android.client.models.EventType
 import io.getstream.chat.android.client.parser.ChatParser
 import okhttp3.Response
 import okhttp3.WebSocket
 import java.util.*
 
-
 class EventsParser(
     private val service: ChatSocketServiceImpl,
-    private val parser: ChatParser
+    private val parser: ChatParser,
+    private val logger: ChatLogger?
 ) : okhttp3.WebSocketListener() {
 
     private var firstReceivedMessage = false
@@ -24,7 +24,7 @@ class EventsParser(
 
     override fun onMessage(webSocket: WebSocket, text: String) {
 
-        Log.d(TAG, "onMessage: $text")
+        logger?.logD(this, "Socket message: $text")
 
         val errorMessage = parser.fromJsonOrError(text, SocketErrorMessage::class.java)
         val errorData = errorMessage.data()
@@ -37,17 +37,20 @@ class EventsParser(
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-
+        logger?.logI(this, "Socket closing... Reason: $reason Code: $code")
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         // Treat as failure and reconnect, socket shouldn't be closed by server
+        logger?.logD(this, "Socket closed. Reason: $reason Code: $code")
         onFailure(webSocket, ChatNetworkError("server closed connection"), null)
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         // Called when socket is disconnected by client also (client.disconnect())
         // See issue here https://stream-io.atlassian.net/browse/CAS-88
+
+        logger?.logE(this, "Socket listener failure. Error: ${t.message}")
         service.onSocketError(ChatNetworkError("listener.onFailure error. reconnecting", t))
     }
 

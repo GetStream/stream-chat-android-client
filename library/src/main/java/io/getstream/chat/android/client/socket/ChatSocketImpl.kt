@@ -12,10 +12,10 @@ class ChatSocketImpl(
     val wssUrl: String,
     val cachedTokenProvider: CachedTokenProvider,
     val chatParser: ChatParser,
-    logger: ChatLogger?
+    val logger: ChatLogger?
 ) : ChatSocket {
 
-    private val service = ChatSocketServiceImpl(chatParser)
+    private val service = ChatSocketServiceImpl(chatParser, logger)
 
     override fun connectAnonymously() {
         connect(null, null)
