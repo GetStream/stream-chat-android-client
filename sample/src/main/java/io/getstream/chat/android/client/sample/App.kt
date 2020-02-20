@@ -18,7 +18,7 @@ import io.getstream.chat.android.client.sample.repositories.ChannelsRepositoryRx
 import io.getstream.chat.android.client.sample.repositories.ChannelsRepositorySync
 import kotlin.time.ExperimentalTime
 
-class App : Application() {
+class App : Applications() {
 
     companion object {
         lateinit var client: ChatClient
