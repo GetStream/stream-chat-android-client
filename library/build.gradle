@@ -33,6 +33,10 @@ android {
         jvmTarget = '1.8'
         noStdlib = true
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

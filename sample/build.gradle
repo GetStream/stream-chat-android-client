@@ -33,11 +33,14 @@ android {
         targetCompatibility = 1.8
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
 
-    debugImplementation project(':library')
+    implementation project(':library')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -46,6 +49,9 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Constraints
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     //LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -71,4 +77,12 @@ dependencies {
     //Stetho
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+}
+
+gradle.taskGraph.useFilter { task ->
+    /**
+     * Ignores release unit tests.
+     * As it's assembled with releaseSdkVersion, which might be outdated
+     */
+    return task.name != 'testReleaseUnitTest'
 }
