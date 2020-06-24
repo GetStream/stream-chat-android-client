@@ -1,7 +1,7 @@
 {
   "id": "8584452-6d711169-0224-41c2-b9aa-1adbe624521b",
   "text": "a",
-  "html": "\u003cp\u003e150\u003c/p\u003e\n",
+  "html": "",
   "type": "regular",
   "user": {
     "id": "8584452",
@@ -12,10 +12,10 @@
     "banned": false,
     "online": true,
     "language": "en",
-    "picture_path": "https://vestiairecollective.imgix.net/profil/8584452-c417564aa562b8a09ac4ea5abfeca7ec.jpg?auto=format\u0026fm=pjpg\u0026w=88\u0026h=88\u0026fit=crop",
+    "picture_path": "",
     "profile": {
-      "deeplink": "com.vestiairecollective.vestiaire://action?type=profil\u0026id=8584452",
-      "url": "/members/profile-8584452.shtml"
+      "deeplink": "",
+      "url": ""
     },
     "username": "mota_shailesh"
   },
