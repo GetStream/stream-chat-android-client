@@ -15,9 +15,9 @@ internal class ChatClientConfig(
     var baseTimeout: Long,
     var cdnTimeout: Long,
     val loggerConfig: ChatLogger.Config,
-    val notificationsConfig: ChatNotificationConfig? = null,
-    val clientVersion: String = ""
+    val notificationsConfig: ChatNotificationConfig? = null
 ) {
     val tokenManager: TokenManager = TokenManagerImpl()
     var isAnonymous: Boolean = false
+    var clientVersion: String = ""
 }

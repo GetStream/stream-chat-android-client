@@ -354,6 +354,9 @@ interface ChatClient {
                 modules.socket(),
                 modules.notifications()
             )
+
+            config.clientVersion = result.getVersion()
+
             instance = result
 
             return result
