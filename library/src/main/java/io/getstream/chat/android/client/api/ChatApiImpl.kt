@@ -17,7 +17,7 @@ import java.util.*
 
 internal class ChatApiImpl(
     private val apiKey: String,
-    private val retrofitApi: RetrofitApi,
+    val retrofitApi: RetrofitApi,
     private val retrofitCdnApi: RetrofitCdnApi,
     private val parser: ChatParser,
     private val uuidGenerator: UuidGenerator

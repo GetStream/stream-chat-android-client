@@ -16,6 +16,7 @@ import io.getstream.chat.android.client.parser.ChatParserImpl
 import io.getstream.chat.android.client.socket.ChatSocket
 import io.getstream.chat.android.client.utils.UuidGeneratorImpl
 import io.getstream.chat.android.client.utils.observable.JustObservable
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 
@@ -52,8 +53,8 @@ class MockClientBuilder {
 
         val config = ChatClientConfig(
             apiKey,
-            "hello.http",
-            "cdn.http",
+            "http://hello.com".toHttpUrlOrNull()!!,
+            "http://cdn.http".toHttpUrlOrNull()!!,
             "socket.url",
             1000,
             1000,

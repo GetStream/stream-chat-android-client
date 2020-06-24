@@ -19,6 +19,7 @@ import io.getstream.chat.android.client.token.TokenProvider
 import io.getstream.chat.android.client.utils.FilterObject
 import io.getstream.chat.android.client.utils.ProgressCallback
 import io.getstream.chat.android.client.utils.observable.ChatObservable
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.File
 import java.util.*
 
@@ -52,7 +53,11 @@ interface ChatClient {
 
     fun createChannel(channelType: String, members: List<String>): Call<Channel>
 
-    fun createChannel(channelType: String, members: List<String>, extraData: Map<String, Any>): Call<Channel>
+    fun createChannel(
+        channelType: String,
+        members: List<String>,
+        extraData: Map<String, Any>
+    ): Call<Channel>
 
     fun createChannel(
         channelType: String,
@@ -63,7 +68,11 @@ interface ChatClient {
 
     fun createChannel(channelType: String, extraData: Map<String, Any>): Call<Channel>
 
-    fun createChannel(channelType: String, channelId: String, extraData: Map<String, Any>): Call<Channel>
+    fun createChannel(
+        channelType: String,
+        channelId: String,
+        extraData: Map<String, Any>
+    ): Call<Channel>
 
     //region CDN
 
@@ -97,7 +106,12 @@ interface ChatClient {
 
     fun deleteImage(channelType: String, channelId: String, url: String): Call<Unit>
 
-    fun replayEvents(channelIds: List<String>, since: Date?, limit: Int = 100, offset: Int = 0): Call<List<ChatEvent>>
+    fun replayEvents(
+        channelIds: List<String>,
+        since: Date?,
+        limit: Int = 100,
+        offset: Int = 0
+    ): Call<List<ChatEvent>>
 
     //endregion
 
@@ -323,8 +337,8 @@ interface ChatClient {
 
             val config = ChatClientConfig(
                 apiKey,
-                "https://$baseUrl/",
-                "https://$cdnUrl/",
+                "https://$baseUrl/".toHttpUrlOrNull()!!,
+                "https://$cdnUrl/".toHttpUrlOrNull()!!,
                 "wss://$baseUrl/",
                 baseTimeout,
                 cdnTimeout,

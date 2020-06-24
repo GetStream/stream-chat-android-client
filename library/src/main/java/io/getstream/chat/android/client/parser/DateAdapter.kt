@@ -9,7 +9,7 @@ import java.util.*
 
 internal class DateAdapter(val gson: Gson) : TypeAdapter<Date>() {
 
-    val dateFormat = SimpleDateFormat(ChatParser.DATE_FORMAT).apply {
+    private val dateFormat = SimpleDateFormat(ChatParser.DATE_FORMAT).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 

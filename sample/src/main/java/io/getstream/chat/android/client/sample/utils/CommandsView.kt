@@ -24,7 +24,6 @@ import io.getstream.chat.android.client.token.TokenProvider
 import io.getstream.chat.android.client.utils.FilterObject
 import io.getstream.chat.android.client.utils.observable.Subscription
 import kotlinx.android.synthetic.main.layout_commands.view.*
-import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -320,25 +319,23 @@ class CommandsView(context: Context?, attrs: AttributeSet?) : LinearLayout(conte
 
         btnSearchMessage.setOnClickListener {
 
-            val channelFiler = Filters.and(
-                Filters.eq("type", chType),
-                Filters.eq("id", chId)
+            val channelFiler = Filters.eq("cid", "$chType:$chId")
+            val messageFilter = Filters.and(
+                Filters.eq("attachments", Filters.exists(true)),
+                Filters.eq("type", "regular")
             )
 
-            val messageFilter = Filters.and(
-                Filters.eq("text", ""),
-                Filters.eq("attachments", Filters.eq("\$exists", true))
-            )
+            //val messageFilter = Filters.eq("attachments", Filters.exists(true))
 
             client.searchMessages(
-                SearchMessagesRequest(0, 100, channelFiler, messageFilter)
+                SearchMessagesRequest(0, 2, channelFiler, messageFilter)
             ).enqueue {
                 UtilsMessages.show(it)
             }
         }
 
         btnUploadImage.setOnClickListener {
-            //client.sendFile(chType, chId, File())
+
         }
 
     }

@@ -12,8 +12,10 @@ import io.getstream.chat.android.client.notifications.options.ChatNotificationCo
 import io.getstream.chat.android.client.parser.ChatParserImpl
 import io.getstream.chat.android.client.socket.ChatSocket
 import io.getstream.chat.android.client.token.FakeTokenManager
+import io.getstream.chat.android.client.utils.ImmediateTokenProvider
 import io.getstream.chat.android.client.utils.UuidGeneratorImpl
 import io.getstream.chat.android.client.utils.observable.JustObservable
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -28,15 +30,17 @@ internal class ClientConnectionTests {
 
     val config = ChatClientConfig(
         "api-key",
-        "hello.http",
-        "cdn.http",
+        "http://hello.com".toHttpUrlOrNull()!!,
+        "http://cdn.http".toHttpUrlOrNull()!!,
         "socket.url",
         1000,
         1000,
         ChatLogger.Config(ChatLogLevel.NOTHING, null),
-        ChatNotificationConfig(context),
-        FakeTokenManager(token)
-    )
+        ChatNotificationConfig(context)
+
+    ).apply {
+        tokenManager.setTokenProvider(ImmediateTokenProvider(token))
+    }
 
     val connectedEvent = ConnectedEvent().apply {
         me = this@ClientConnectionTests.user

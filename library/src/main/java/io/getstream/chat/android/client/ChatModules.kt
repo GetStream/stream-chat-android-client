@@ -13,6 +13,7 @@ import io.getstream.chat.android.client.parser.ChatParserImpl
 import io.getstream.chat.android.client.socket.ChatSocket
 import io.getstream.chat.android.client.socket.ChatSocketImpl
 import io.getstream.chat.android.client.utils.UuidGeneratorImpl
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
@@ -21,10 +22,9 @@ internal open class ChatModules(val config: ChatClientConfig) {
 
     private val defaultLogger = ChatLogger.Builder(config.loggerConfig).build()
     private val defaultParser by lazy { ChatParserImpl() }
-    private val defaultNotifications by lazy { buildNotification(config.notificationsConfig, api()) }
+    private val defaultNotifications by lazy { buildNotification(config.notificationsConfig!!, api()) }
     private val defaultApi by lazy { buildApi(config, parser()) }
     private val defaultSocket by lazy { buildSocket(config, parser()) }
-    private val bitmapsLoader = BitmapsLoaderImpl(config.notificationsConfig.context)
 
     //region Modules
 
@@ -58,7 +58,7 @@ internal open class ChatModules(val config: ChatClientConfig) {
     }
 
     private fun buildRetrofit(
-        endpoint: String,
+        endpoint: HttpUrl,
         connectTimeout: Long,
         writeTimeout: Long,
         readTimeout: Long,
@@ -74,7 +74,7 @@ internal open class ChatModules(val config: ChatClientConfig) {
             .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
             // interceptors
-            .addInterceptor(HeadersInterceptor(config))
+            .addInterceptor(HeadersInterceptor(config, config.clientVersion))
             .addInterceptor(HttpLoggingInterceptor())
             .addInterceptor(TokenAuthInterceptor(
                 config.tokenManager,
