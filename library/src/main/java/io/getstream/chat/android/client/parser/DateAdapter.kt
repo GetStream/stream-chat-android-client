@@ -1,15 +1,14 @@
 package io.getstream.chat.android.client.parser
 
-import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class DateAdapter(val gson: Gson) : TypeAdapter<Date>() {
+internal class DateAdapter : TypeAdapter<Date>() {
 
-    private val dateFormat = SimpleDateFormat(ChatParser.DATE_FORMAT).apply {
+    private val dateFormat = SimpleDateFormat(ChatParser.DATE_FORMAT, Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
