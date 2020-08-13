@@ -1,3 +1,9 @@
+# To be released:
+
+- Decouple cloud messages handler logic from configuration data
+- Add methods to ChatClient API signaling that cloud message was handled by external handler
+- Add maven plugin
+
 # 1.13.1 - Fri 7 Aug 2020
 
 - Fix DateParser
