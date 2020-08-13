@@ -46,7 +46,7 @@ interface ChatLogger {
     }
 
     companion object {
-        var instance: ChatLogger = ChatSilentLogger()
+        var instance: ChatLogger = ChatLoggerImpl() // ChatSilentLogger()
 
         fun get(tag: Any): TaggedLogger {
             return TaggedLoggerImpl(tag, instance)

@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.extensions.safeLet
+import io.getstream.chat.android.client.logger.ChatLogger
 import io.getstream.chat.android.client.models.Message
 
 class NotificationMessageReceiver : BroadcastReceiver() {
@@ -21,7 +22,10 @@ class NotificationMessageReceiver : BroadcastReceiver() {
         const val KEY_TEXT_REPLY = "text_reply"
     }
 
+    private val logger = ChatLogger.get("NotificationsReceiver")
+
     override fun onReceive(context: Context?, intent: Intent?) {
+        logger.logI("onReceive, action: ${intent?.action}")
         when (intent?.action) {
             ACTION_READ -> markAsRead(
                 intent.getStringExtra(KEY_MESSAGE_ID),
@@ -42,6 +46,7 @@ class NotificationMessageReceiver : BroadcastReceiver() {
                 // Unsupported action
             }
         }
+        logger.logI("onReceive, cancelling notification")
         cancelNotification(context, intent?.getIntExtra(KEY_NOTIFICATION_ID, 0))
     }
 

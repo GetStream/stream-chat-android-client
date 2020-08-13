@@ -39,7 +39,6 @@ class CustomObjectParsingTests {
         assertThat(message.latestReactions).isEmpty()
         assertThat(message.reactionCounts).isEmpty()
         assertThat(message.attachments).isEmpty()
-        assertThat(message.cid).isEmpty()
         assertThat(message.silent).isFalse()
 
         message.reactionCounts.put("like", 1)
