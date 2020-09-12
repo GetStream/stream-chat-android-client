@@ -32,11 +32,11 @@ jobs:
         if: failure()
         with:
           name: testDebugUnitTest
-          path: library/build/reports/tests/testDebugUnitTest
+          path: client/build/reports/tests/testDebugUnitTest
       - name: Upload testDebugUnitTest Results
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: testReleaseUnitTest
-          path: library/build/reports/tests/testReleaseUnitTest
+          path: client/build/reports/tests/testReleaseUnitTest
 
