@@ -52,7 +52,7 @@ public data class Channel(
     @IgnoreSerialisation
     @IgnoreDeserialisation
     var hiddenMessagesBefore: Date? = null,
-    val cooldown: Int = 0
+    var cooldown: Int = 0
 ) : CustomObject {
 
     val lastUpdated: Date?
